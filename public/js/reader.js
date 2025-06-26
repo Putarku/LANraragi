@@ -827,7 +827,7 @@ Reader.applyContainerWidth = function () {
 };
 
 Reader.registerPreload = function () {
-    Reader.preloadCount = +$("#preload-input").val().trim() || +localStorage.preloadCount || 2;
+    Reader.preloadCount = +$("#preload-input").val().trim() || +localStorage.preloadCount || 8;
     $("#preload-input").val(Reader.preloadCount);
     localStorage.preloadCount = Reader.preloadCount;
 };

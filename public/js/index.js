@@ -53,7 +53,7 @@ Index.initializeAll = function () {
 
     // Default to on deck for carousel
     if (localStorage.getItem("carouselType") === null) {
-        localStorage.carouselType = "ondeck";
+        localStorage.carouselType = "random";
     }
 
     // Default to opened carousel
@@ -79,10 +79,10 @@ Index.initializeAll = function () {
                 Index.updateCarousel();
             },
             items: {
-                ondeck: { name: I18N.CarouselOnDeck, icon: "fas fa-book-reader" },
+                //ondeck: { name: I18N.CarouselOnDeck, icon: "fas fa-book-reader" },
                 random: { name: I18N.CarouselRandom, icon: "fas fa-random" },
-                inbox: { name: I18N.NewArchives, icon: "fas fa-envelope-open-text" },
-                untagged: { name: I18N.UntaggedArchives, icon: "fas fa-edit" },
+                //inbox: { name: I18N.NewArchives, icon: "fas fa-envelope-open-text" },
+                //untagged: { name: I18N.UntaggedArchives, icon: "fas fa-edit" },
             },
         }),
     });
@@ -377,7 +377,7 @@ Index.updateCarousel = function (e) {
     case "random":
         $("#carousel-icon")[0].classList = "fas fa-random";
         $("#carousel-title").text(I18N.CarouselRandom);
-        endpoint = `/api/search/random?filter=${IndexTable.currentSearch}&category=${Index.selectedCategory}&count=15`;
+        endpoint = `/api/search/random?filter=${IndexTable.currentSearch}&category=${Index.selectedCategory}&count=10`;
 
         // Special categories that imply additional query params
         if (Index.selectedCategory === "NEW_ONLY") {
