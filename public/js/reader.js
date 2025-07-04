@@ -269,10 +269,10 @@ Reader.initializeSettings = function () {
     Reader.doublePageMode = localStorage.doublePageMode === "true" || false;
     Reader.doublePageMode ? $("#double-page").addClass("toggled") : $("#single-page").addClass("toggled");
 
-    Reader.ignoreProgress = localStorage.ignoreProgress === "true" || false;
+    Reader.ignoreProgress = localStorage.ignoreProgress === "false" ? false : true;
     Reader.ignoreProgress ? $("#untrack-progress").addClass("toggled") : $("#track-progress").addClass("toggled");
 
-    Reader.infiniteScroll = localStorage.infiniteScroll === "true" || false;
+    Reader.infiniteScroll = localStorage.infiniteScroll === "false" ? false : true;
     $(Reader.infiniteScroll ? "#infinite-scroll-on" : "#infinite-scroll-off").addClass("toggled");
 
     Reader.showOverlayByDefault = localStorage.showOverlayByDefault === "true" || false;
