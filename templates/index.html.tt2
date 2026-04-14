@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<head>
+	<title>[% title %]</title>
+
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="apple-mobile-web-status-bar-style" content="black" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<link type="image/png" rel="icon" href="favicon.ico" />
+	<link rel="manifest" href="app.webappmanifest" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/lrr.css?$version") %]" />
+
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/fontawesome-all.min.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/jquery.contextMenu.min.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/awesomplete.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/tippy.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/allcollapsible.min.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/swiper-bundle.min.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/ReactToastify.min.css") %]" />
+	<link rel="stylesheet" type="text/css" href="[% c.url_for("/css/vendor/sweetalert2.min.css") %]" />
+	[% csshead %]
+
+	<script src="[% c.url_for("/js/vendor/jquery.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/jquery.dataTables.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/preact.umd.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/hooks.umd.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/compat.umd.js") %]" type="text/JAVASCRIPT"></script>
+	<script>window.React = window.preactCompat; window.react = window.preactCompat;</script>
+	<script src="[% c.url_for("/js/vendor/clsx.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/react-toastify.umd.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/jquery.ui.position.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/jquery.contextMenu.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/awesomplete.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/popper.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/tippy-bundle.umd.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/marked.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/allcollapsible.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/swiper-bundle.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/sweetalert2.min.js") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/vendor/clipboard.min.js") %]" type="text/JAVASCRIPT"></script>
+
+	<script src="[% c.url_for("/js/i18n.js?$version") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/index.js?$version") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/common.js?$version") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/server.js?$version") %]" type="text/JAVASCRIPT"></script>
+	<script src="[% c.url_for("/js/index_datatables.js?$version") %]" type="text/JAVASCRIPT"></script>
+
+</head>
+
+<body data-user-logged="[% userlogged %]">
+
+	[% IF userlogged %]
+	<p id="nb">
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/upload") %]">[% c.lh("Add Archives") %]</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/batch") %]">[% c.lh("Batch Operations") %]</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/config") %]">[% c.lh("Settings") %]</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/config/categories") %]">[% c.lh("Modify Categories") %]</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/stats") %]">[% c.lh("Statistics") %]</a>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/logs") %]">[% c.lh("Logs") %]</a>
+	</p>
+	[% ELSE %]
+	<p id="nb">
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/login") %]">[% c.lh("Admin Login") %]</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="[% c.url_for("/stats") %]">[% c.lh("Statistics") %]</a>
+	</p>
+	[% END %]
+
+	<div class='ido'>
+		<h1 class='ih'>[% motd %]</h1>
+		<div id='toppane'>
+			<div class='idi'>
+				<div id="category-container">
+					<!-- Categories go here -->
+				</div>
+				<input type='text' id='search-input' class='search stdinput' size='90' style='width:95%'
+					placeholder='[% c.lh("Search Title, Artist, Series, Language or Tags") %]' />
+				<input id='apply-search' class='searchbtn stdbtn' type='button' value='[% c.lh("Apply Filter") %]' />
+				<input id='clear-search' class='searchbtn stdbtn' type='button' value='[% c.lh("Clear Filter") %]' />
+			</div>
+
+			<ul class="collapsible index-carousel with-right-caret">
+				<li class="option-flyout"
+					style="text-align: left;display: flex;flex-wrap: wrap;justify-content: space-between;">
+					<div class="collapsible-title caret-right" style="display: flex;flex: 1 1 0;overflow: hidden;">
+						<i id="carousel-icon" class="fa"></i>
+						<div id="carousel-title"
+							style="display:inline;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left: 8px;"
+							title="[% c.lh('Click to show archives from the current search with the specified filter') %]">...</div>
+					</div>
+					<div class="collapsible-right">
+						<a class="fa fa-2x fa-sync-alt" style="margin-bottom: -4px; display:none" id="reload-carousel"
+							href="#" title="[% c.lh('Refresh Selection') %]"></a>
+						<a class="fa fa-2x fa-ellipsis-h" style="margin-bottom: -4px; margin-left: 12px"
+							id="carousel-mode-menu" href="#" title="[% c.lh('Carousel Options') %]"></a>
+					</div>
+
+					<div class="collapsible-body" style="flex: 1 0 100%;overflow: hidden;box-sizing: border-box;">
+						<div class="swiper index-carousel-container">
+							<a href="#" class="fa fa-3x fa-chevron-left carousel-prev"></a>
+							<a href="#" class="fa fa-3x fa-chevron-right carousel-next"></a>
+							<div class="swiper-wrapper"></div>
+							<div id="carousel-loading"
+								style="height: 344px; display:flex; justify-content: center; align-items: center;">
+								<i class="fa fa-4x fa-stroopwafel fa-spin"></i>
+							</div>
+							<div id="carousel-empty"
+								style="height: 344px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+								<i class="fa fa-4x fa-sad-cry"></i>
+								<span style="margin-top: 12px;">[% c.lh("No results here.") %]</span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<div class="table-options" style="display: none;">
+				<div class="thumbnail-options">[% c.lh("Sort by:") %]
+					<select class="favtag-btn" id="namespace-sortby">
+						<option selected value="title">[% c.lh("Title") %]</option>
+						<option selected value="date_added">[% c.lh("Date") %]</option>
+					</select>
+					<a class="fa fa-sort-alpha-down fa-2x table-option" id="order-sortby" href="#"
+						title="[% c.lh('Sort Order') %]"></a>
+
+					<input id="thumbnail-crop" class="fa table-option" type="checkbox"
+						title="If enabled, thumbnails that don't fit a regular A4 page will be cropped to only show the left side.">
+					<label for="thumbnail-crop" style="vertical-align: middle; padding-top:6px">[% c.lh("Crop thumbnails") %]</label>
+				</div>
+				<div class="compact-options">[% c.lh("Columns:") %]
+					<select class="favtag-btn" id="columnCount">
+						<script>  
+							for (let i = 1; i <= 20; i++) {  
+								document.write(`<option value="${i}">${i}</option>`);  
+							}  
+						</script> 
+					</select>
+				</div>
+				<div style="margin-left:auto">[% c.lh("Go to Page:") %]
+					<select class="favtag-btn" id="page-select">
+					</select>
+					<a class="fa fa-list fa-2x mode-toggle thumbnail-toggle table-option" href="#"
+						title="[% c.lh('Switch to Compact Mode') %]"></a>
+					<a class="fa fa-table fa-2x mode-toggle compact-toggle table-option" href="#"
+						title="[% c.lh('Switch to Thumbnail Mode') %]"></a>
+				</div>
+			</div>
+
+			<table class="itg datatables">
+				<thead class="list" style="display: none;">
+					<tr id="header-row">
+						<!--dynamic row-->
+					</tr>
+				</thead>
+				<tbody class="list" style="display: none;">
+				</tbody>
+			</table>
+
+			<div id="json-error" style="display:none">
+				<h1 style="color: red">
+					<i class="fas fa-bomb"></i> [% c.lh("I don't know everything, but I sure as hell know this database's busted lads") %]
+					<i class="fas fa-bomb"></i>
+				</h1>
+				<h2>[% c.lh("The database cache is corrupt, and as such LANraragi is unable to display your archive list.") %]</h2>
+			</div>
+
+		</div>
+	</div>
+
+	[% INCLUDE footer %]
+
+	<button id="pseudo-copy-btn" data-clipboard-text="" style="display: none">click me</button>
+
+	<script>
+
+		// Last few remains of JS using server-provided data
+		jQuery(() => {
+
+			[% IF usingdefpass %]
+			//If the json has the "default password" flag, flash a friendly notification inviting the user to change his password
+			LRR.toast({
+				heading: "[% c.lh('You\'re using the default password and that\'s super baka of you') %]",
+				text: '[% c.lh("Login with password \"kamimamita\" and change that shit on the double. ...Or just disable it! Why not check the configuration options afterwards, while you\'re at it?") %]',
+				icon: 'warning',
+				hideAfter: 25000,
+				closeOnClick: false,
+				draggable: false,
+			});
+			[% END %]
+
+			const catList = [];
+			[% IF categories.size > 0 %]
+			[% FOREACH categories %]
+			// Push a tuple into catList
+			catList.push({
+				name: "[% name %]",
+				id: "[% id %]",
+			});
+			[% END %]
+			[% END %]
+
+			// Initialize context menu
+			$.contextMenu({
+				selector: '.context-menu',
+				build: ($trigger, e) => {
+					return {
+						callback: function (key, options) {
+							Index.handleContextMenu(key, $(this).attr("id"));
+						},
+						items: {
+							"read": { name: "[% c.lh('Read') %]", icon: "fas fa-book" },
+							"download": { name: "[% c.lh('Download') %]", icon: "fas fa-save" },
+							"copy link": { name: "[% c.lh('Copy link') %]", icon: "fas fa-link" },
+							[% IF userlogged %]
+							"sep1": "---------",
+							"edit": { name: "[% c.lh('Edit Metadata') %]", icon: "fas fa-pencil-alt" },
+							"delete": { name: "[% c.lh('Delete') %]", icon: "fas fa-trash-alt" },
+							"rating": {
+							    "name": "[% c.lh('Add Rating') %]",
+							    "icon": "fas fa-star",
+							    "items": Index.loadContextMenuRatings($trigger.attr("id"))
+							},
+							"collections": {
+								"name": "[% c.lh('Add to Category') %]",
+								"icon": "fas fa-search-plus",
+								"items": Index.loadContextMenuCategories(catList, $trigger.attr("id"))
+							}
+							[% END %]
+						}
+					}
+				}
+			});
+		});
+	</script>
+
+	<div id="overlay-shade"> </div>
+
+	<div id="updateOverlay" class="id1 base-overlay small-overlay" style="display:none">
+		<h2 class="ih" style="text-align:center">[% c.lh("New Version Release Notes") %]</h2>
+		<div id="changelog"></div>
+	</div>
+
+
+</body>
+
+</html>

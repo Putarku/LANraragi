@@ -1,0 +1,36 @@
+<tr>
+    <td class="option-td">
+        <h2 class="ih"> [% c.lh("Shinobu Status") %] </h2>
+    </td>
+    <td class="config-td">
+        <span id="shinobu-ok">[% c.lh("The Shinobu File Watcher is currently") %] <h2 class="ih"
+                style="display:inline; color:rgb(26, 165, 26)">👍
+                [% c.lh("OK!") %]</h2> </span>
+        <span id="shinobu-ko">[% c.lh("The Shinobu File Watcher is currently") %] <h2 class="ih"
+                style="display:inline; color:rgb(207, 37, 37)">👹
+                [% c.lh("Kaput!") %] </h2></span>
+        (PID: <span id="pid"></span>)
+        <br>[% c.lh("This File Watcher is responsible for monitoring your content directory and automatically handling new archives as they come.") %] <br>
+    </td>
+</tr>
+
+<tr>
+    <td class="option-td">
+        <input id="restart-button" class='stdbtn' type='button' value="[% c.lh("Restart File Watcher") %]" />
+    </td>
+    <td class="config-td">
+        [% c.lh("If Shinobu is dead or unresponsive, you can reboot her by clicking this button.") %]
+    </td>
+</tr>
+
+<tr>
+    <td class="option-td">
+        <input id='open-minion' class='stdbtn' type='button' value="[% c.lh("Open Minion Console") %]" />
+    </td>
+    <td class="config-td">
+        [% c.lh("The Minion Worker handles spare tasks that are too long to execute within the request/response lifecycle of web applications.") %]<br>
+        [% c.lh("The console shows currently running and concluded tasks.") %]
+    </td>
+</tr>
+
+<tr></tr>

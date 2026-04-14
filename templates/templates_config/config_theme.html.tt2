@@ -1,0 +1,31 @@
+<tr>
+    <td></td>
+    <td class="config-td"><br>
+        [% c.lh("The selected theme will apply to the entire application and be shown to all users.") %]<br>
+        [% c.lh("If you're using a browser that supports \"theme-color\", the theme's primary color will also be applied there.") %]<br><br>
+        [% c.lh("Click on a theme to preview it before saving!") %]
+    </td>
+
+</tr>
+
+<tr>
+    <td colspan="2">
+
+        [% FOREACH css IN csslist %]
+
+        <div style="display: inline-block;">
+            <input type="radio" id="[% css.id %]" class="theme-switch" name="theme" title="[% css.name %]" value="[% css.file %]" [% IF theme==css.file %]checked[% END
+                %]>
+            <label for="[% css.id %]">
+                <div id="[% css.id %]-div" class="theme-switch" title="[% css.name %]" style="cursor:pointer">
+                    <img title="[% css.name %]" src="[% c.url_for(css.preview) %]" class="theme-preview">
+                    <h3>[% css.name %]</h3>
+                </div>
+
+            </label>
+        </div>
+
+        [% END %] 
+
+    </td>
+</tr>
