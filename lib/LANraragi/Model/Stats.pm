@@ -160,7 +160,9 @@ sub index_tags_for_id ( $redis, $redistx, $index_id, $archive_id ) {
         $t = trim_CRLF($t);
 
         # The following are basic and therefore don't count as "tagged"
-        $has_tags = 1 unless $t =~ /(artist|parody|series|language|event|group|date_added|timestamp|source):.*/;
+        # Modification: Only check for source: tag to determine if it's untagged.
+        # This allows users to use the untagged filter to find archives that haven't been processed by a metadata plugin yet.
+        $has_tags = 1 if $t =~ /source:.*/i;
 
         # If the tag is a source: tag, add it to the URL index. This always uses the original archive ID.
         if ( $t =~ /source:(.*)/i ) {

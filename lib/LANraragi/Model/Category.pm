@@ -185,13 +185,13 @@ sub delete_category {
     }
 }
 
-# add_to_category(categoryid, arcid)
+# add_to_category(categoryid, arcid, no_cache)
 #   Adds the given archive ID to the given category.
 #   Only valid if the category is Static.
 #   Returns 1 on success, 0 on failure alongside an error message.
 sub add_to_category {
 
-    my ( $cat_id, $arc_id ) = @_;
+    my ( $cat_id, $arc_id, $no_cache ) = @_;
     my $logger = get_logger( "Categories", "lanraragi" );
     my $redis  = LANraragi::Model::Config->get_redis;
     my $err    = "";
@@ -233,7 +233,7 @@ sub add_to_category {
         push @cat_archives, $arc_id;
         $redis->hset( $cat_id, "archives", encode_json( \@cat_archives ) );
 
-        invalidate_cache();
+        invalidate_cache() unless $no_cache;
         $redis->quit;
         return ( 1, $err );
     }
@@ -244,13 +244,13 @@ sub add_to_category {
     return ( 0, $err );
 }
 
-# remove_from_category(categoryid, arcid)
+# remove_from_category(categoryid, arcid, no_cache)
 #   Removes the given archive ID from the given category.
 #   Only valid if the category is an Archive Set.
 #   Returns 1 on success, 0 on failure alongside an error message.
 sub remove_from_category {
 
-    my ( $cat_id, $arc_id ) = @_;
+    my ( $cat_id, $arc_id, $no_cache ) = @_;
     my $logger = get_logger( "Categories", "lanraragi" );
     my $redis  = LANraragi::Model::Config->get_redis;
     my $err    = "";
@@ -282,7 +282,7 @@ sub remove_from_category {
 
         $redis->hset( $cat_id, "archives", encode_json( \@cat_archives ) );
 
-        invalidate_cache();
+        invalidate_cache() unless $no_cache;
         $redis->quit;
         return ( 1, $err );
     }

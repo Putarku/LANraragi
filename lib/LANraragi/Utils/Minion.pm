@@ -676,6 +676,113 @@ sub add_tasks {
         }
     );
 
+    $minion->add_task(
+        rebuild_title_sort_index => sub {
+            my ( $job, @args ) = @_;
+
+            my $logger = get_logger( "Minion", "minion" );
+            $logger->info("Rebuilding title sort index (Minion task)...");
+
+            eval {
+                require LANraragi::Utils::Database;
+                my $count = LANraragi::Utils::Database::rebuild_title_sort_index();
+                $logger->info("Title sort index rebuilt: $count archives");
+                $job->finish( { count => $count } );
+            };
+
+            if ($@) {
+                my $error = "Error rebuilding title sort index: $@";
+                $logger->error($error);
+                $job->fail( { error => $error } );
+            }
+        }
+    );
+
+    $minion->add_task(
+        bootstrap_indexes => sub {
+            my ( $job, @args ) = @_;
+
+            my $logger = get_logger( "Minion", "minion" );
+            my $start_total = time();
+            $logger->info("Bootstrap indexes: checking and building missing indexes...");
+
+            eval {
+                require LANraragi::Utils::Database;
+                my $redis_search = LANraragi::Model::Config->get_redis_search;
+
+                # Check & rebuild LRR_SORTED_title
+                unless ( $redis_search->exists("LRR_SORTED_title") ) {
+                    $logger->info("LRR_SORTED_title missing, building...");
+                    my $t_count = LANraragi::Utils::Database::rebuild_title_sort_index();
+                    $logger->info("Title sort index built: $t_count archives");
+                    $job->note( title_built => $t_count );
+                } else {
+                    $logger->info("LRR_SORTED_title already exists, skipping.");
+                }
+
+                # Check & rebuild NSINDEX_* (check a few common namespaces)
+                my @check_ns = qw( female: male: artist: parody: character: group: tag: language: );
+                my $has_nsindex = 0;
+                my @existing_ns;
+                for my $ns (@check_ns) {
+                    if ( $redis_search->exists("NSINDEX_$ns") ) {
+                        $has_nsindex = 1;
+                        push @existing_ns, $ns;
+                    }
+                }
+                if (@existing_ns) {
+                    $logger->info("NSINDEX_* already exists (found: " . join(', ', @existing_ns) . "), skipping.");
+                } else {
+                    $logger->info("NSINDEX_* missing, building...");
+                    my $ns_count = LANraragi::Utils::Database::rebuild_nsindex();
+                    $logger->info("NSINDEX_* built: $ns_count namespaces");
+                    $job->note( nsindex_built => $ns_count );
+                }
+
+                $redis_search->quit;
+                my $elapsed_total = sprintf( "%.2f", time() - $start_total );
+                $logger->info("Bootstrap indexes complete in ${elapsed_total}s.");
+                $job->finish( { success => 1, elapsed => $elapsed_total } );
+            };
+
+            if ($@) {
+                my $error = "Error bootstrapping indexes: $@";
+                $logger->error($error);
+                $job->fail( { error => $error } );
+            }
+        }
+    );
+
+    $minion->add_task(
+        rebuild_search_cache => sub {
+            my ( $job, $cachekey ) = @_;
+
+            my $logger = get_logger( "Minion", "minion" );
+            $logger->info("Rebuilding search cache entry $cachekey...");
+
+            require LANraragi::Model::Search;
+            require Storable;
+
+            my $redis = LANraragi::Model::Config->get_redis_search;
+
+            # Default homepage query: empty filter + category, sorted by date_added desc.
+            my ( $keyed_count, @filtered ) = LANraragi::Model::Search::search_uncached(
+                "", "", "date_added", 1, 0, 0, 0, 0
+            );
+
+            eval { $redis->hset( "LRR_SEARCHCACHE", $cachekey, Storable::nfreeze( [ $keyed_count, @filtered ] ) ); };
+            if ($@) {
+                $logger->warn("Failed to rebuild search cache entry $cachekey: $@");
+                $redis->hdel( "LRR_SEARCHCACHE", $cachekey );
+                $job->fail( { errors => [$@] } );
+            } else {
+                $logger->info("Search cache entry $cachekey rebuilt.");
+                $job->finish;
+            }
+            $redis->quit;
+        }
+    );
+
 }
 
 1;

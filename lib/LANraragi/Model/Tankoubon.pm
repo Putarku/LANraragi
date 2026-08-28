@@ -452,10 +452,10 @@ sub add_to_tankoubon ( $tank_id, $arc_id ) {
     return ( 0, $err );
 }
 
-# remove_from_tankoubon(tankoubonid, arcid)
+# remove_from_tankoubon(tankoubonid, arcid, no_cache)
 #   Removes the given archive ID from the given Tankoubon.
 #   Returns the position of the removed ID (starting at 1) on success, 0 on failure alongside an error message.
-sub remove_from_tankoubon ( $tank_id, $arcid ) {
+sub remove_from_tankoubon ( $tank_id, $arcid, $no_cache = 0 ) {
 
     my $logger = get_logger( "Tankoubon", "lanraragi" );
     my $redis  = LANraragi::Model::Config->get_redis;
@@ -524,7 +524,7 @@ sub remove_from_tankoubon ( $tank_id, $arcid ) {
         # We could reset progress on the tank here when archives are removed, but it feels like bad UX
         # update_metadata_field( $tank_id, "progress", 0 );
 
-        invalidate_cache();
+        invalidate_cache() unless $no_cache;
         # Subtract 3 from the score to exclude the metadata fields
         # A bit brittle if we add more fields later...
         return ( $score - 3, $err );
